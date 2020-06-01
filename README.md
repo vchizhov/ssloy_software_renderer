@@ -15,3 +15,6 @@ Cons:
 - goes into details over unimportant topics (e.g. scanline rendering & Bresenham) - detracts from what is supposedly the main goal
 - provides too few details and motivation at places
 - needless abstraction for some algorithms which detracts from the main idea
+
+Results:
+![Lesson1](correct_images/lesson1.tga)
