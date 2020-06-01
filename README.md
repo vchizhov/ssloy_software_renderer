@@ -17,4 +17,4 @@ Cons:
 - needless abstraction for some algorithms which detracts from the main idea
 
 Results:
-![Lesson1](correct_images/lesson1.png)
+![Lesson1](correct_images_png/lesson1.png)
