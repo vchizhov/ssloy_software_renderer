@@ -17,4 +17,4 @@ Cons:
 - needless abstraction for some algorithms which detracts from the main idea
 
 Results:
-![Lesson1](https://github.com/vchizhov/ssloy_software_renderer/tree/master/correct_images/lesson1.tga)
+![Lesson1](https://github.com/vchizhov/ssloy_software_renderer/tree/master/correct_images/lesson1.tga?raw=true)
