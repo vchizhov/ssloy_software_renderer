@@ -20,10 +20,10 @@ Results:
 
 
 ![Lesson1](correct_images_png/lesson1.png)
-![Lesson2](correct_images_png/lesson2.png)
 ![Lesson2_05](correct_images_png/lesson2_05.png)
-![Lesson3](correct_images_png/lesson3.png)
+![Lesson2](correct_images_png/lesson2.png)
 ![Lesson3_05](correct_images_png/lesson3_05.png)
+![Lesson3](correct_images_png/lesson3.png)
 ![Lesson3_hw](correct_images_png/lesson3_hw.png)
 ![Lesson4](correct_images_png/lesson4.png)
 ![Lesson5](correct_images_png/lesson5.png)
