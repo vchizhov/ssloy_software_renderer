@@ -1,4 +1,10 @@
 #pragma once
+#define LINE_BRESENHAM_NO_FUNC 1
+#if LINE_BRESENHAM_NO_FUNC != 1
+#include <algorithm>
+#include <cmath>
+#endif
+
 
 template<typename Function>
 void line_bresenham
@@ -7,7 +13,17 @@ void line_bresenham
       const int        y0,        /* y coordindate of the first point */
       const int        x1,        /* x coordindate of the second point */
       const int        y1,        /* y coordindate of the second point */
-      Function&&       plot_fn)   /* function to set a pixel */
+      Function&&       plot_fn)   /* function to plot a pixel: auto(int,int) */
+
+/*
+    Rasterizes a line from (x0, y0) to (x1,y1) using Bresenham's algorithm.
+
+    The code is written to be as generic as possible and not rely on external 
+    functions. This philosophy introduces some code bloat. External functions
+    can be enabled disabled by setting: LINE_BRESENHAM_NO_FUNC to 0/1.
+
+    The derivation of the algorithm at the end.
+*/
 
 {
     /************************ Variable declarations ***************************/
@@ -22,7 +38,7 @@ void line_bresenham
     int d2y;
     int err;
 
-    /* whether to swap X and Y */
+    /* whether to swap X and Y (angle between line and X axis > 45 deg) */
     bool greater45;
 
     /* whether to swap start and end points */
@@ -38,10 +54,13 @@ void line_bresenham
 
     /************************ Actual code ***************************/
     /* set up the start and end points */
+
     d2x = x0<=x1 ? x1-x0 : x0-x1;
     d2y = y0<=y1 ? y1-y0 : y0-y1;
     greater45 = d2x < d2y;
     flipped_x = greater45 ? y1<y0 : x1<x0;
+
+#if LINE_BRESENHAM_NO_FUNC == 1
 
     /* swap coords */
     sx = greater45 ? (flipped_x ? y1 : y0) : (flipped_x ? x1 : x0);
@@ -49,13 +68,38 @@ void line_bresenham
     ex = greater45 ? (flipped_x ? y0 : y1) : (flipped_x ? x0 : x1);
     ey = greater45 ? (flipped_x ? x0 : x1) : (flipped_x ? y0 : y1);
 
+#else
+
+    sx = x0;
+    sy = y0;
+    ex = x1;
+    ey = y1;
+
+    if (greater45)
+    {
+        std::swap (sx, sy);
+        std::swap (ex, ey);
+    }
+
+    if (flipped_x)
+    {
+        std::swap (sx, ex);
+        std::swap (sy, ey);
+    }
+
+#endif
+
     /* increment */
     flipped_y = sy > ey;
     incr = flipped_y ? -1 : 1;
 
     /* compute differences */
     d2x = 2*(ex-sx);
+#if LINE_BRESENHAM_NO_FUNC == 1
     d2y = flipped_y ? 2*(sy-ey) : 2*(ey-sy);
+#else
+    d2y = std::abs(2*(sy-ey));
+#endif
     err = d2y - (ex-sx);
 
     int y = sy;
@@ -160,12 +204,12 @@ void line_bresenham
     err = d2y - (ex-sx)
     y = sy
     for x = sx to ex
+        plot(x,y)
         if (err <= 0)
             err = err + d2y
         else
             y = y + 1
             err = err + d2y - d2x
-        plot(x,y)
 
     However, in 1) we considered only the case where ex-sx>=ey-sy>=0.
     To properly draw a line for all octants, we need to consider all possible 
@@ -201,12 +245,13 @@ void line_bresenham
     err = d2y - (ex-sx)
     y = sy
     for x = sx to ex
+        plot(x,y)    
         if (err <= 0)
             err = err + d2y
         else
             y = y + incr
             err = err + d2y - d2x
-        plot(x,y)    
+
 
     8)
     Case: ex<sx, (sx-ex) >= (ey-sy) >=0 or (sx-ex) >= (sy-ey) > 0
@@ -248,15 +293,20 @@ void line_bresenham
     err = d2y - (ex-sx)
     y = sy
     for x = sx to ex
+        if (greater45)
+            plot(y,x)
+        else
+            plot(x,y)    
         if (err <= 0)
             err = err + d2y
         else
             y = y + incr
             err = err + d2y - d2x
-        if (greater45)
-            plot(y,x)
-        else
-            plot(x,y)    
+
+    10) 
+    The small difference compared to ssloy's code is due to the comparison 
+    > dx rather than <=0 in ours (for us this is factored out in the initial err).
+    
 
 */
 

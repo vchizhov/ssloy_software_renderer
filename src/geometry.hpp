@@ -1,3 +1,5 @@
+#pragma warning(disable : 4201)
+
 #ifndef __GEOMETRY_H__
 #define __GEOMETRY_H__
 
@@ -51,6 +53,49 @@ template <class t> std::ostream& operator<<(std::ostream& s, Vec2<t>& v) {
 template <class t> std::ostream& operator<<(std::ostream& s, Vec3<t>& v) {
 	s << "(" << v.x << ", " << v.y << ", " << v.z << ")\n";
 	return s;
+}
+
+template<typename T>
+Vec3<T> operator-(const Vec3<T>& lhs, const Vec3<T>& rhs)
+{
+    return Vec3<T>(lhs.x-rhs.x, lhs.y-rhs.y, lhs.z-rhs.z);
+}
+
+template<typename T>
+Vec3<T> operator/(const Vec3<T>& lhs, const T rhs)
+{
+    return Vec3<T>(lhs.x/rhs, lhs.y/rhs, lhs.z/rhs);
+}
+
+template<typename T>
+Vec3<T> operator*(const T& lhs, const Vec3<T>& rhs)
+{
+    return Vec3<T>(lhs*rhs.x, lhs*rhs.y, lhs*rhs.z);
+}
+
+template<typename T>
+T dot (const Vec3<T>& lhs, const Vec3<T>& rhs)
+{
+    return lhs.x*rhs.x + lhs.y*rhs.y + lhs.z*rhs.z;
+}
+
+
+template<typename T>
+Vec3<T> cross (const Vec3<T>& lhs, const Vec3<T>& rhs)
+{
+    return Vec3<T>(lhs.y*rhs.z-lhs.z*rhs.y, lhs.z*rhs.x-lhs.x*rhs.z, lhs.x*rhs.y-lhs.y*rhs.x);
+}
+
+template<typename T>
+Vec3<T> normalize(const Vec3<T>& arg)
+{
+    return arg / sqrt(dot(arg,arg));
+}
+
+template<typename T>
+T clamp(const T arg, const T a, const T b)
+{
+    return arg < a ? a : arg > b ? b : arg;
 }
 
 #endif //__GEOMETRY_H__
